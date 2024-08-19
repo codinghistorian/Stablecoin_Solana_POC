@@ -19,6 +19,7 @@ pub mod two_mappings {
     pub fn open_position(ctx: Context<OpenPosition>, col_type: u64) -> Result<()> {
         ctx.accounts.position_counter.count = ctx.accounts.position_counter.count + 1;
         ctx.accounts.protocol_state_account.total_position_count = ctx.accounts.protocol_state_account.total_position_count + 1;
+        msg!("{}", format!("{:?}", ctx.accounts.position));
         Ok(())
     }
 
@@ -69,13 +70,15 @@ pub struct OpenPosition<'info> {
         bump)]
     position: Account<'info, Position>,
 
-    #[account(mut)]
+    #[account(mut, seeds=[&1u64.to_le_bytes().as_ref()], bump)]
     protocol_state_account: Account<'info, ProtocolState>,
 
     #[account(mut)]
     signer: Signer<'info>,
 
-    #[account(mut)]
+    #[account(mut, seeds = [
+        &signer.key.to_bytes().as_ref()
+    ], bump)]
     position_counter: Account<'info, PositionCounter>,
 
     system_program: Program<'info, System>,
@@ -101,7 +104,7 @@ pub struct CDPAction<'info> {
 pub struct PositionCounterInit<'info> {
     #[account(init,
         payer = signer,
-        space = size_of::<Position>() + 8,
+        space = size_of::<PositionCounter>() + 8,
         seeds=[
             &signer.key.to_bytes().as_ref()        
         ],
@@ -115,6 +118,7 @@ pub struct PositionCounterInit<'info> {
 }
 
 #[account]
+#[derive(Debug)]
 pub struct Position {
     col_type: u64,
     collateral_amount: u64,
