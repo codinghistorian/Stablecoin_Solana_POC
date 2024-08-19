@@ -27,11 +27,17 @@ pub mod two_mappings {
         //TODO add require! that the positionCounter account exist for the signer
         //TODO add transfer of lamports via systemProgram from the signer to this or some other account
         //TODO add mint of stablecoin token to the signer
+        msg!("Collateralize and Borrow called with col_amount: {}", col_amount);
+        msg!("Collateralize and Borrow called with stablecoin_amount: {}", stablecoin_amount);
         let position = &mut ctx.accounts.position;
         position.col_type = col_type;
         position.collateral_amount = col_amount;
+        msg!("Posiiton.collateral_amount after update: {}", position.collateral_amount);
+
         //TODO debt_amount should not be 1:1 to stablecoin amount, later to be fixed
         position.debt_amount = stablecoin_amount;
+        msg!("Posiiton.debt_amount after update: {}", position.debt_amount);
+
         Ok(())
     }
 

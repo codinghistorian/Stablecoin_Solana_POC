@@ -83,20 +83,16 @@ describe("Solana_stablecoin_POC", () => {
     console.log("Col type is : ",firstPositionState.colType);
     console.log("Col amount is : ",firstPositionState.collateralAmount);
     console.log("Debt amount is : ",firstPositionState.debtAmount);
-
-    //check the value in the Protocol state account's total_position_count. It should be 1.
-    //check the value in the position counter's count. It should be 1.
-    // const provider = anchor.AnchorProvider.env();
-    // const signer = provider.wallet.publicKey;
-    // const seeds = [signer.toBuffer()];
-    // const [positionCounter, _bump] = anchor.web3.PublicKey.findProgramAddressSync(
-    //   seeds,
-    //   program.programId,
-    // );
-
-    // console.log("Position counter for the `${signer}` is : " + positionCounter.toBase58());
-    // const tx = await program.methods.openPositionCounter().rpc();
-    // console.log("Your transaction signature", tx);
+    const tx0 = await program.methods.collateralizeAndBorrow(
+      updatedCount,// position_counter_count BN(0)
+      colType,// col_type BN(0)
+      new anchor.BN(66),// col_amount
+      new anchor.BN(33)// stablecoin_amount
+    ).rpc();
+    let firstPositionStateAfterOpenPosition = await program.account.position.fetch(firstPositionAccount);
+    console.log("Col type is : ",firstPositionStateAfterOpenPosition.colType);
+    console.log("Col amount is : ",firstPositionStateAfterOpenPosition.collateralAmount);
+    console.log("Debt amount is : ",firstPositionStateAfterOpenPosition.debtAmount);
   
 	});
 
