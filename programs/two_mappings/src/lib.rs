@@ -32,10 +32,9 @@ pub mod two_mappings {
         let position = &mut ctx.accounts.position;
         position.col_type = col_type;
         position.collateral_amount = col_amount;
-        msg!("Posiiton.collateral_amount after update: {}", position.collateral_amount);
-
         //TODO debt_amount should not be 1:1 to stablecoin amount, later to be fixed
         position.debt_amount = stablecoin_amount;
+        msg!("Posiiton.collateral_amount after update: {}", position.collateral_amount);
         msg!("Posiiton.debt_amount after update: {}", position.debt_amount);
 
         Ok(())

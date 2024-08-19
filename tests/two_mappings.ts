@@ -86,10 +86,11 @@ describe("Solana_stablecoin_POC", () => {
     const tx0 = await program.methods.collateralizeAndBorrow(
       updatedCount,// position_counter_count BN(0)
       colType,// col_type BN(0)
-      new anchor.BN(66),// col_amount
+      new anchor.BN(99),// col_amount
       new anchor.BN(33)// stablecoin_amount
     ).rpc();
     let firstPositionStateAfterOpenPosition = await program.account.position.fetch(firstPositionAccount);
+    console.log("The whole position is : ", firstPositionStateAfterOpenPosition)
     console.log("Col type is : ",firstPositionStateAfterOpenPosition.colType);
     console.log("Col amount is : ",firstPositionStateAfterOpenPosition.collateralAmount);
     console.log("Debt amount is : ",firstPositionStateAfterOpenPosition.debtAmount);
